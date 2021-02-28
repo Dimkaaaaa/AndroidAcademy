@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Android Academy</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
+
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -9,4 +9,21 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="back">Back</string>
+    <string name="age">13+</string>
+    <string name="name">Avengers:\nEnd Game</string>
+    <string name="name_list">Avengers:End Game</string>
+    <string name="tag">Action, Adventure, Fantasy</string>
+    <string name="reviews">125 REVIEWS</string>
+    <string name="storyline">Storyline</string>
+    <string name="story">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
+    <string name="robert_downey_jr">Robert Downey Jr.</string>
+    <string name="chris_evans">Chris Evans</string>
+    <string name="mark_ruffalo">Mark Ruffalo</string>
+    <string name="chris_hemsworth">Chris Hemsworth</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="movies_list">Movies list</string>
+    <string name="_137_min">137 MIN</string>
+
 </resources>
