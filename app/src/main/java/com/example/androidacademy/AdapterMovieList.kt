@@ -1,33 +1,46 @@
 package com.example.androidacademy
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.androidacademy.databinding.ViewHolderMovieBinding
+import com.example.androidacademy.model.Movie
 
 class AdapterMovieList(
-    private val clickListener: OnRecyclerItemClicked,
-    context: Context,
-    var movies: List<Movie>
+        private val clickListener: OnRecyclerItemClicked,
+        context: Context,
+        var movies: List<Movie>
 ) : RecyclerView.Adapter<AdapterMovieList.MovieListViewHolder>() {
 
+    private val radius = context.resources.getDimension(R.dimen.corner_radius)
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    fun getItem(position: Int): Movie = movies[position]
+    private fun getItem(position: Int): Movie = movies[position]
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): AdapterMovieList.MovieListViewHolder {
-        return MovieListViewHolder(inflater.inflate(R.layout.view_holder_movie, parent, false))
+        val binding =
+                ViewHolderMovieBinding.inflate(inflater, parent, false)
+        return MovieListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AdapterMovieList.MovieListViewHolder, position: Int) {
         holder.onBind(getItem(position))
         holder.itemView.setOnClickListener {
-            clickListener.onClick()
+            clickListener.onClick(getItem(position))
         }
     }
 
@@ -35,18 +48,70 @@ class AdapterMovieList(
         return movies.size
     }
 
-    class MovieListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val name: TextView = itemView.findViewById(R.id.tv_name)
+    inner class MovieListViewHolder(private val binding: ViewHolderMovieBinding) :
+            RecyclerView.ViewHolder(binding.root) {
 
+        private val genresList: MutableList<String> = mutableListOf<String>()
+        private lateinit var ivStars: List<ImageView>
+
+        @SuppressLint("SetTextI18n")
         fun onBind(movie: Movie) {
-            name.text = movie.name
-        }
 
+            ivStars = listOf(
+                    binding.imageViewStar1,
+                    binding.imageViewStar2,
+                    binding.imageViewStar3,
+                    binding.imageViewStar4,
+                    binding.imageViewStar5,
+            )
+            genresList.clear()
+            Glide.with(binding.root)
+                    .load(movie.imageUrl)
+                    .transform(RoundedCorners(radius.toInt()))
+                    .into(binding.ivMovieList)
+
+            binding.apply {
+                tvName.text = movie.title
+                movie.genres.listIterator().forEach {
+                    genresList.add(it.name)
+                }
+                tvGenre.text = genresList.joinToString(", ")
+                tvAge.text = "${movie.pgAge}+"
+                tvReviews.text = "${movie.reviewCount} REVIEWS"
+                tvDuration.text = "${movie.runningTime} MIN"
+                ivStars.forEachIndexed { index, imageView ->
+                    val colorId = if (movie.rating > index) R.color.pink_light else R.color.gray_dark
+                    ImageViewCompat.setImageTintList(
+                            imageView, ColorStateList.valueOf(
+                            ContextCompat.getColor(imageView.context, colorId)
+                    )
+                    )
+                }
+
+            }
+
+        }
     }
 
 }
 
+
 interface OnRecyclerItemClicked {
-    fun onClick()
+    fun onClick(movie: Movie)
 }
 
+class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
+
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        outRect.left = space
+        outRect.right = space
+        outRect.bottom = space
+
+        // Add top margin only for the first item to avoid double space between items
+        if (parent.getChildLayoutPosition(view) == 0) {
+            outRect.top = space
+        } else {
+            outRect.top = 0
+        }
+    }
+}

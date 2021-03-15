@@ -3,18 +3,23 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/movie_item"
-    android:layout_width="170dp"
-    android:layout_height="296dp"
-    android:layout_marginTop="11dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/background"
-    android:clipChildren="true">
+    android:clipChildren="true"
+    android:elevation="2dp">
 
     <ImageView
         android:id="@+id/iv_movie_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/background"
         android:src="@drawable/movie_list"
-
+        app:layout_constraintDimensionRatio="1:1.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,8 +51,8 @@
 
 
     <TextView
-        android:id="@+id/tag"
-        android:layout_width="343dp"
+        android:id="@+id/tv_genre"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -57,19 +62,20 @@
         android:text="@string/tag"
         android:textColor="@color/tag"
         android:textSize="8sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/tv_reviews"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewStar1"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_reviews"
         app:layout_constraintStart_toEndOf="@+id/imageViewStar4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tag"
-        app:srcCompat="@drawable/star_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_reviews"
+        app:layout_constraintTop_toTopOf="@+id/tv_reviews"
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageViewStar2"
@@ -79,7 +85,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
         app:layout_constraintStart_toEndOf="@+id/imageViewStar1"
         app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
-        app:srcCompat="@drawable/star_icon" />
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageViewStar3"
@@ -89,7 +95,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
         app:layout_constraintStart_toEndOf="@+id/imageViewStar2"
         app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
-        app:srcCompat="@drawable/star_icon" />
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageViewStar4"
@@ -99,7 +105,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
         app:layout_constraintStart_toEndOf="@+id/imageViewStar3"
         app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
-        app:srcCompat="@drawable/star_icon" />
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageViewStar5"
@@ -109,23 +115,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
         app:layout_constraintStart_toEndOf="@+id/imageViewStar4"
         app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
-        app:srcCompat="@drawable/star_icon1" />
+        app:srcCompat="@drawable/ic_star" />
 
     <TextView
-        android:id="@+id/textViewReviews"
+        android:id="@+id/tv_reviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/reviews"
         android:textColor="@color/reviews"
         android:textSize="8sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar5"
-        app:layout_constraintTop_toTopOf="@+id/imageViewStar1" />
+        app:layout_constraintBottom_toBottomOf="@+id/iv_movie_list"
+        app:layout_constraintStart_toEndOf="@+id/imageViewStar5" />
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="343dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -144,9 +151,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/_137_min"
         android:textColor="@color/reviews"
-        android:layout_marginBottom="8dp"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

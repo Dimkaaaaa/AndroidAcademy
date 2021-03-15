@@ -4,11 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidacademy.data.JsonMovieRepository
+import com.example.androidacademy.model.Movie
+import kotlinx.coroutines.*
 
 class FragmentMoviesList : Fragment() {
+
+
+    private lateinit var movies: List<Movie>
+    private val scope = CoroutineScope(Dispatchers.Default + Job())
+    private lateinit var movieRepository: JsonMovieRepository
+    private lateinit var adapter: AdapterMovieList
+    private lateinit var listRecyclerView: RecyclerView
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -18,20 +31,30 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerview_movies)
-        val movies = Movie.getMovies()
-        val adapter = AdapterMovieList(clickListener,view.context, movies)
-        listRecyclerView.adapter = adapter
-        listRecyclerView.layoutManager = GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+
+        scope.launch {
+            movieRepository = JsonMovieRepository(requireContext())
+            movies = movieRepository.loadMovies()
+            listRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerview_movies)
+            adapter = AdapterMovieList(clickListener, view.context, movies)
+            withContext(Dispatchers.Main) {
+                listRecyclerView.adapter = adapter
+                listRecyclerView.layoutManager =
+                    GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
+                listRecyclerView.addItemDecoration(SpacesItemDecoration(spacingInPixels))
+            }
+        }
 
     }
 
-    private val clickListener = object:OnRecyclerItemClicked{
-        override fun onClick() {
-            parentFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, FragmentMoviesDetails())
-                .addToBackStack(null)
-                .commit()
+    private val clickListener = object : OnRecyclerItemClicked {
+        override fun onClick(movie: Movie) {
+//            parentFragmentManager.beginTransaction()
+//                .add(R.id.fragment_container, FragmentMoviesDetails())
+//                .addToBackStack(null)
+//                .commit()
+            Toast.makeText(context,movie.title,Toast.LENGTH_SHORT).show()
         }
     }
 }
