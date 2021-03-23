@@ -5,8 +5,10 @@
     android:id="@+id/movie_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="6dp"
     android:background="@drawable/background"
     android:clipChildren="true"
+    app:layout_constrainedWidth="true"
     android:elevation="2dp">
 
     <ImageView
@@ -23,6 +25,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_mask"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_movie_list"
+        app:layout_constraintEnd_toEndOf="@+id/iv_movie_list"
+        app:layout_constraintStart_toStartOf="@+id/iv_movie_list"
+        app:layout_constraintTop_toTopOf="@+id/iv_movie_list" />
 
 
     <TextView
@@ -66,55 +78,55 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageViewStar1"
+        android:id="@+id/iv_star1"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="6dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_reviews"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar4"
+        app:layout_constraintStart_toEndOf="@+id/iv_star4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_reviews"
         app:layout_constraintTop_toTopOf="@+id/tv_reviews"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:id="@+id/imageViewStar2"
+        android:id="@+id/iv_star2"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar1"
-        app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_star1"
+        app:layout_constraintStart_toEndOf="@+id/iv_star1"
+        app:layout_constraintTop_toTopOf="@+id/iv_star1"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:id="@+id/imageViewStar3"
+        android:id="@+id/iv_star3"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar2"
-        app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_star1"
+        app:layout_constraintStart_toEndOf="@+id/iv_star2"
+        app:layout_constraintTop_toTopOf="@+id/iv_star1"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:id="@+id/imageViewStar4"
+        android:id="@+id/iv_star4"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar3"
-        app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_star1"
+        app:layout_constraintStart_toEndOf="@+id/iv_star3"
+        app:layout_constraintTop_toTopOf="@+id/iv_star1"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:id="@+id/imageViewStar5"
+        android:id="@+id/iv_star5"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewStar1"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar4"
-        app:layout_constraintTop_toTopOf="@+id/imageViewStar1"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_star1"
+        app:layout_constraintStart_toEndOf="@+id/iv_star4"
+        app:layout_constraintTop_toTopOf="@+id/iv_star1"
         app:srcCompat="@drawable/ic_star" />
 
     <TextView
@@ -128,7 +140,7 @@
         android:textColor="@color/reviews"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_movie_list"
-        app:layout_constraintStart_toEndOf="@+id/imageViewStar5" />
+        app:layout_constraintStart_toEndOf="@+id/iv_star5" />
 
     <TextView
         android:id="@+id/tv_name"

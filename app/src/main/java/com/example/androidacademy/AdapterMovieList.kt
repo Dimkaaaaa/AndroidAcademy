@@ -1,17 +1,15 @@
 package com.example.androidacademy
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Rect
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.androidacademy.databinding.ViewHolderMovieBinding
@@ -58,11 +56,11 @@ class AdapterMovieList(
         fun onBind(movie: Movie) {
 
             ivStars = listOf(
-                    binding.imageViewStar1,
-                    binding.imageViewStar2,
-                    binding.imageViewStar3,
-                    binding.imageViewStar4,
-                    binding.imageViewStar5,
+                    binding.ivStar1,
+                    binding.ivStar2,
+                    binding.ivStar3,
+                    binding.ivStar4,
+                    binding.ivStar5,
             )
             genresList.clear()
             Glide.with(binding.root)
@@ -98,20 +96,4 @@ class AdapterMovieList(
 
 interface OnRecyclerItemClicked {
     fun onClick(movie: Movie)
-}
-
-class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
-
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        outRect.left = space
-        outRect.right = space
-        outRect.bottom = space
-
-        // Add top margin only for the first item to avoid double space between items
-        if (parent.getChildLayoutPosition(view) == 0) {
-            outRect.top = space
-        } else {
-            outRect.top = 0
-        }
-    }
 }
