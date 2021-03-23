@@ -1,42 +1,49 @@
 package com.example.androidacademy
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.androidacademy.databinding.ViewHolderActorBinding
 import com.example.androidacademy.model.Actor
 
-class AdapterActorList(
-    context: Context,
-    var actors: List<Actor>
-): RecyclerView.Adapter<AdapterActorList.ActorListViewHolder>() {
+class AdapterActorList: ListAdapter<Actor, AdapterActorList.ActorListViewHolder>(DiffCallback())  {
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    fun getItem(position: Int): Actor = actors[position]
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterActorList.ActorListViewHolder {
-        return ActorListViewHolder(inflater.inflate(R.layout.view_holder_actor, parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorListViewHolder {
+        val binding =
+                ViewHolderActorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ActorListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AdapterActorList.ActorListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ActorListViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return actors.size
-    }
+    class ActorListViewHolder(private val binding: ViewHolderActorBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    class ActorListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        private val name: TextView = itemView.findViewById(R.id.tv_actor_ame)
-
-        fun onBind(actor: Actor){
-            name.text = actor.name
+        fun onBind(actor: Actor) {
+            binding.tvActorAme.text = actor.name
+            Glide.with(binding.root)
+                    .load(actor.imageUrl)
+                    .into(binding.ivActor)
         }
-
     }
 
 }
+
+class DiffCallback : DiffUtil.ItemCallback<Actor>() {
+    override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Actor, newItem: Actor): Boolean {
+        return oldItem == newItem
+    }
+}
+
+
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +30,6 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
 
         scope.launch {
             movieRepository = JsonMovieRepository(requireContext())
@@ -42,7 +40,6 @@ class FragmentMoviesList : Fragment() {
                 listRecyclerView.adapter = adapter
                 listRecyclerView.layoutManager =
                     GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
-                listRecyclerView.addItemDecoration(SpacesItemDecoration(spacingInPixels))
             }
         }
 
@@ -50,11 +47,10 @@ class FragmentMoviesList : Fragment() {
 
     private val clickListener = object : OnRecyclerItemClicked {
         override fun onClick(movie: Movie) {
-//            parentFragmentManager.beginTransaction()
-//                .add(R.id.fragment_container, FragmentMoviesDetails())
-//                .addToBackStack(null)
-//                .commit()
-            Toast.makeText(context,movie.title,Toast.LENGTH_SHORT).show()
+            parentFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, FragmentMoviesDetails.newInstance(movie.id))
+                .addToBackStack(null)
+                .commit()
         }
     }
 }
