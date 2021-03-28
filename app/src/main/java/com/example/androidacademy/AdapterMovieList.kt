@@ -2,13 +2,13 @@ package com.example.androidacademy
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -16,22 +16,15 @@ import com.example.androidacademy.databinding.ViewHolderMovieBinding
 import com.example.androidacademy.model.Movie
 
 class AdapterMovieList(
-        private val clickListener: OnRecyclerItemClicked,
-        context: Context,
-        var movies: List<Movie>
-) : RecyclerView.Adapter<AdapterMovieList.MovieListViewHolder>() {
-
-    private val radius = context.resources.getDimension(R.dimen.corner_radius)
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    private fun getItem(position: Int): Movie = movies[position]
+        private val clickListener: OnRecyclerItemClicked
+) :androidx.recyclerview.widget.ListAdapter<Movie, AdapterMovieList.MovieListViewHolder>(DiffCallbackMovies()) {
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
     ): AdapterMovieList.MovieListViewHolder {
         val binding =
-                ViewHolderMovieBinding.inflate(inflater, parent, false)
+                ViewHolderMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieListViewHolder(binding)
     }
 
@@ -42,9 +35,6 @@ class AdapterMovieList(
         }
     }
 
-    override fun getItemCount(): Int {
-        return movies.size
-    }
 
     inner class MovieListViewHolder(private val binding: ViewHolderMovieBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -65,7 +55,7 @@ class AdapterMovieList(
             genresList.clear()
             Glide.with(binding.root)
                     .load(movie.imageUrl)
-                    .transform(RoundedCorners(radius.toInt()))
+                    .transform(RoundedCorners(8))
                     .into(binding.ivMovieList)
 
             binding.apply {
@@ -96,4 +86,14 @@ class AdapterMovieList(
 
 interface OnRecyclerItemClicked {
     fun onClick(movie: Movie)
+}
+
+class DiffCallbackMovies : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem == newItem
+    }
 }
