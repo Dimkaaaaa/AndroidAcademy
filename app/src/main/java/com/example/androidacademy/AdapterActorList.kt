@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.androidacademy.databinding.ViewHolderActorBinding
 import com.example.androidacademy.model.Actor
 
-class AdapterActorList: ListAdapter<Actor, AdapterActorList.ActorListViewHolder>(DiffCallback())  {
+class AdapterActorList: ListAdapter<Actor, AdapterActorList.ActorListViewHolder>(DiffCallbackActors())  {
 
 
 
@@ -35,7 +35,7 @@ class AdapterActorList: ListAdapter<Actor, AdapterActorList.ActorListViewHolder>
 
 }
 
-class DiffCallback : DiffUtil.ItemCallback<Actor>() {
+class DiffCallbackActors : DiffUtil.ItemCallback<Actor>() {
     override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {
         return oldItem.id == newItem.id
     }

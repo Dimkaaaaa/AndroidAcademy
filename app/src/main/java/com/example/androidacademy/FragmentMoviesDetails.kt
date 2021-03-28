@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidacademy.data.JsonMovieRepository
 import com.example.androidacademy.databinding.FragmentMoviesDetailsBinding
+import com.example.androidacademy.model.Actor
 import com.example.androidacademy.model.Movie
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,7 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var movie: Movie
     private lateinit var movieRepository: JsonMovieRepository
     private lateinit var binding: FragmentMoviesDetailsBinding
+    private val adapter = AdapterActorList()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -37,17 +39,28 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpActorListAdapter()
+        setUpListeners()
+
+        lifecycleScope.launch {
+            movie = getMovie()
+            updateAdapter(movie.actors)
+            bindUI(movie)
+        }
+    }
+
+
+    private suspend fun getMovie(): Movie {
+        movieRepository = JsonMovieRepository(requireContext())
+        return arguments?.let { movieRepository.loadMovie(it.getInt("movieID")) }!!
+    }
+
+    private fun setUpListeners() {
         binding.ivBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
         binding.tvBack.setOnClickListener {
             parentFragmentManager.popBackStack()
-        }
-
-        lifecycleScope.launch {
-            movieRepository = JsonMovieRepository(requireContext())
-            movie = arguments?.let { movieRepository.loadMovie(it.getInt("movieID")) }!!
-            bindUI(binding, movie, view)
         }
     }
 
@@ -63,7 +76,7 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindUI(binding: FragmentMoviesDetailsBinding, movie: Movie, view: View) {
+    private fun bindUI(movie: Movie) {
         val genresList: MutableList<String> = mutableListOf()
         val ivStars = listOf(
                 binding.ivStar1,
@@ -92,11 +105,19 @@ class FragmentMoviesDetails : Fragment() {
                         imageView, ColorStateList.valueOf(
                         ContextCompat.getColor(imageView.context, colorId)))
             }
-            val adapter = AdapterActorList()
-            adapter.submitList(movie.actors)
-            recyclerviewActors.adapter = adapter
-            recyclerviewActors.layoutManager =
-                    LinearLayoutManager(view.context, RecyclerView.HORIZONTAL, false)
+
         }
     }
+
+    private fun setUpActorListAdapter() {
+        binding.recyclerviewActors.adapter = adapter
+        binding.recyclerviewActors.layoutManager =
+                LinearLayoutManager(parentFragment?.context, RecyclerView.HORIZONTAL, false)
+    }
+
+    private fun updateAdapter(actors: List<Actor>) {
+        adapter.submitList(actors)
+    }
 }
+
+
