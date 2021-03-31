@@ -1,4 +1,4 @@
-package com.example.androidacademy
+package com.example.androidacademy.movieditails
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
@@ -9,22 +9,28 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.androidacademy.AdapterActorList
+import com.example.androidacademy.MainActivity
+import com.example.androidacademy.R
 import com.example.androidacademy.data.JsonMovieRepository
 import com.example.androidacademy.databinding.FragmentMoviesDetailsBinding
 import com.example.androidacademy.model.Actor
 import com.example.androidacademy.model.Movie
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FragmentMoviesDetails : Fragment() {
 
-    private lateinit var movie: Movie
     private lateinit var movieRepository: JsonMovieRepository
     private lateinit var binding: FragmentMoviesDetailsBinding
     private val adapter = AdapterActorList()
+    private lateinit var viewModel: MovieDetailsViewModel
+    private var movieID: Int = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -38,15 +44,25 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this, MovieDetailsViewModelFactory((requireActivity() as MainActivity).repository)).get(MovieDetailsViewModel::class.java)
+        movieID = arguments?.getInt("movieID")!!
 
         setUpActorListAdapter()
         setUpListeners()
 
+        viewModel.loadMovie(movieID)
+
         lifecycleScope.launch {
-            movie = getMovie()
-            updateAdapter(movie.actors)
-            bindUI(movie)
+
+            viewModel.movie.collect {
+                it?.let {
+                    bindUI(it)
+                    updateAdapter(it.actors)
+                }
+            }
         }
+
+
     }
 
 
