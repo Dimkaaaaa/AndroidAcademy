@@ -17,16 +17,15 @@ import com.bumptech.glide.Glide
 import com.example.androidacademy.AdapterActorList
 import com.example.androidacademy.MainActivity
 import com.example.androidacademy.R
-import com.example.androidacademy.data.JsonMovieRepository
 import com.example.androidacademy.databinding.FragmentMoviesDetailsBinding
 import com.example.androidacademy.model.Actor
-import com.example.androidacademy.model.Movie
+import com.example.androidacademy.model.MovieDetails
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FragmentMoviesDetails : Fragment() {
 
-    private lateinit var movieRepository: JsonMovieRepository
+
     private lateinit var binding: FragmentMoviesDetailsBinding
     private val adapter = AdapterActorList()
     private lateinit var viewModel: MovieDetailsViewModel
@@ -66,10 +65,10 @@ class FragmentMoviesDetails : Fragment() {
     }
 
 
-    private suspend fun getMovie(): Movie {
-        movieRepository = JsonMovieRepository(requireContext())
-        return arguments?.let { movieRepository.loadMovie(it.getInt("movieID")) }!!
-    }
+//    private suspend fun getMovie(): Movie {
+//        movieRepository = JsonMovieRepository(requireContext())
+//        return arguments?.let { movieRepository.loadMovie(it.getInt("movieID")) }!!
+//    }
 
     private fun setUpListeners() {
         binding.ivBack.setOnClickListener {
@@ -92,7 +91,7 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindUI(movie: Movie) {
+    private fun bindUI(movie: MovieDetails) {
         val genresList: MutableList<String> = mutableListOf()
         val ivStars = listOf(
                 binding.ivStar1,
@@ -103,7 +102,7 @@ class FragmentMoviesDetails : Fragment() {
         )
 
         Glide.with(binding.root)
-                .load(movie.imageUrl)
+                .load(movie.detailImageUrl)
                 .into(binding.ivPosterPicture)
 
         binding.apply {
@@ -116,7 +115,7 @@ class FragmentMoviesDetails : Fragment() {
             tvReviews.text = "${movie.reviewCount} REVIEWS"
             tvStory.text = movie.storyLine
             ivStars.forEachIndexed { index, imageView ->
-                val colorId = if (movie.rating > index) R.color.pink_light else R.color.gray_dark
+                val colorId = if (movie.rating/2 > index) R.color.pink_light else R.color.gray_dark
                 ImageViewCompat.setImageTintList(
                         imageView, ColorStateList.valueOf(
                         ContextCompat.getColor(imageView.context, colorId)))
