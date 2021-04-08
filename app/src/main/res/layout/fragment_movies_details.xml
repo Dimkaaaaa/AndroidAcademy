@@ -23,8 +23,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/orig"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/orig" />
 
         <View
             android:layout_width="0dp"
@@ -81,11 +81,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            android:text="@string/name"
             android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pg_age" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_pg_age"
+            tools:text="@string/name" />
 
         <TextView
             android:id="@+id/tv_genre"
@@ -96,10 +96,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:gravity="center_vertical"
-            android:text="@string/tag"
             android:textColor="@color/tag"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            tools:text="@string/tag" />
 
         <ImageView
             android:id="@+id/iv_star1"
@@ -157,12 +157,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8.89dp"
-            android:text="@string/reviews"
             android:textColor="@color/reviews"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_star1"
             app:layout_constraintStart_toEndOf="@+id/iv_star5"
-            app:layout_constraintTop_toTopOf="@+id/iv_star1" />
+            app:layout_constraintTop_toTopOf="@+id/iv_star1"
+            tools:text="@string/reviews" />
 
         <TextView
             android:id="@+id/tv_storyline"
@@ -186,12 +186,12 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_thin"
             android:lineSpacingExtra="4sp"
-            android:text="@string/story"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_storyline" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_storyline"
+            tools:text="@string/story" />
 
 
         <TextView

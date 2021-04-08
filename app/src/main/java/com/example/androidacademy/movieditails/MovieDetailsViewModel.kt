@@ -3,14 +3,14 @@ package com.example.androidacademy.movieditails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidacademy.data.MovieRepository
-import com.example.androidacademy.model.Movie
+import com.example.androidacademy.model.MovieDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(private val repository: MovieRepository) : ViewModel() {
-    private val _movie = MutableStateFlow<Movie?>(null)
-    val movie: StateFlow<Movie?> = _movie
+    private val _movie = MutableStateFlow<MovieDetails?>(null)
+    val movie: StateFlow<MovieDetails?> = _movie
 
 
     fun loadMovie(movieID: Int) {

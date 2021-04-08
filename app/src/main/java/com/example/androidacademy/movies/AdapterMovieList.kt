@@ -68,7 +68,7 @@ class AdapterMovieList(
                 tvReviews.text = "${movie.reviewCount} REVIEWS"
                 tvDuration.text = "${movie.runningTime} MIN"
                 ivStars.forEachIndexed { index, imageView ->
-                    val colorId = if (movie.rating > index) R.color.pink_light else R.color.gray_dark
+                    val colorId = if (movie.rating/2 > index) R.color.pink_light else R.color.gray_dark
                     ImageViewCompat.setImageTintList(
                             imageView, ColorStateList.valueOf(
                             ContextCompat.getColor(imageView.context, colorId)
