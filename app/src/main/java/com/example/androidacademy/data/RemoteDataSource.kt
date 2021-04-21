@@ -1,10 +1,10 @@
 package com.example.androidacademy.data
 
 
-import com.example.androidacademy.model.Movie
-import com.example.androidacademy.model.MovieDetails
+import com.example.androidacademy.data.room.entitys.MovieDetailsEntity
+import com.example.androidacademy.data.room.entitys.MovieEntity
 
 interface RemoteDataSource {
-    suspend fun loadMovies(): List<Movie>
-    suspend fun loadMovie(movieId: Int): MovieDetails
+    suspend fun loadMoviesFromNet(): List<MovieEntity>
+    suspend fun loadMovieFromNet(movieId: Int): MovieDetailsEntity
 }
