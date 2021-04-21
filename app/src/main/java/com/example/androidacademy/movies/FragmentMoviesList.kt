@@ -16,7 +16,6 @@ import com.example.androidacademy.R
 import com.example.androidacademy.databinding.FragmentMoviesListBinding
 import com.example.androidacademy.model.Movie
 import com.example.androidacademy.movieditails.FragmentMoviesDetails
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FragmentMoviesList : Fragment(), OnRecyclerItemClicked {
@@ -48,9 +47,9 @@ class FragmentMoviesList : Fragment(), OnRecyclerItemClicked {
 
     private fun loadDataToAdapter(adapter: AdapterMovieList) {
         lifecycleScope.launch {
-            viewModel.movies.collect { movieList ->
+            viewModel.movies.observe(viewLifecycleOwner, { movieList ->
                 adapter.submitList(movieList)
-            }
+            })
         }
     }
 

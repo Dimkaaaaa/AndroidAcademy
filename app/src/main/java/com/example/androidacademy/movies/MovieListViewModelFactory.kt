@@ -2,7 +2,8 @@ package com.example.androidacademy.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.androidacademy.data.MovieRepository
+import com.example.androidacademy.repository.MovieRepository
+
 
 class MovieListViewModelFactory (private val repository: MovieRepository) : ViewModelProvider.Factory {
 

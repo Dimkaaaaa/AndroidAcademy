@@ -1,19 +1,50 @@
-package com.example.androidacademy.data
+package com.example.androidacademy.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.example.androidacademy.data.retrofit.RetrofitSource
+import com.example.androidacademy.data.room.entitys.asModel
+import com.example.androidacademy.di.NetWork
+import com.example.androidacademy.di.RoomSource
 import com.example.androidacademy.model.Movie
 import com.example.androidacademy.model.MovieDetails
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-interface MovieRepository {
-    suspend fun loadMovies(): List<Movie>
-    suspend fun loadMovie(movieId: Int): MovieDetails
-}
+class MovieRepository(private val database: RoomSource) {
 
-class MovieRepositoryImpl(private val remoteDataSource: RemoteDataSource) : MovieRepository {
-    override suspend fun loadMovies(): List<Movie> {
-        return remoteDataSource.loadMovies()
+    val movies: LiveData<List<Movie>> = Transformations.map(database.dao.getAllMovies()) {
+        it.asModel()
     }
 
-    override suspend fun loadMovie(movieId: Int): MovieDetails {
-        return remoteDataSource.loadMovie(movieId)
+    var movieDetails: MovieDetails? = null
+
+    suspend fun refreshMovies() {
+        withContext(Dispatchers.IO) {
+            try {
+                val movies = RetrofitSource(NetWork.api).loadMoviesFromNet()
+                database.dao.insertAllMovies(movies)
+            } catch (e: Exception) {
+                // Описать действия при отсутствии интернета
+            }
+        }
+    }
+
+    suspend fun loadMovieFromDb(movieId: Int) {
+        withContext(Dispatchers.IO) {
+            movieDetails = database.dao.getMovieDetails(movieId)?.asModel()
+        }
+    }
+
+    suspend fun refreshMovie(movieId: Int) {
+        withContext(Dispatchers.IO) {
+            try {
+                val movieD = RetrofitSource(NetWork.api).loadMovieFromNet(movieId)
+                database.dao.insertMovieDetails(movieD)
+                movieDetails = movieD.asModel()
+            } catch (e: Exception) {
+            }
+        }
+
     }
 }

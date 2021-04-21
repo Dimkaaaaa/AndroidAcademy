@@ -1,4 +1,4 @@
-package com.example.androidacademy.data
+package com.example.androidacademy.data.retrofit
 
 import com.example.androidacademy.data.retrofit.response.*
 import retrofit2.http.GET

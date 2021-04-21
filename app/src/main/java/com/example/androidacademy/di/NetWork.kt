@@ -1,6 +1,6 @@
 package com.example.androidacademy.di
 
-import com.example.androidacademy.data.MovieApiService
+import com.example.androidacademy.data.retrofit.MovieApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -11,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
-class NetWork {
+object NetWork {
 
     private val baseUrl = "https://api.themoviedb.org/"
     private val version = "3/"

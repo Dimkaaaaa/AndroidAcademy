@@ -20,7 +20,6 @@ import com.example.androidacademy.R
 import com.example.androidacademy.databinding.FragmentMoviesDetailsBinding
 import com.example.androidacademy.model.Actor
 import com.example.androidacademy.model.MovieDetails
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FragmentMoviesDetails : Fragment() {
@@ -53,22 +52,17 @@ class FragmentMoviesDetails : Fragment() {
 
         lifecycleScope.launch {
 
-            viewModel.movie.collect {
+            viewModel.movie.observe( viewLifecycleOwner, {
                 it?.let {
                     bindUI(it)
                     updateAdapter(it.actors)
                 }
-            }
+            })
         }
 
 
     }
 
-
-//    private suspend fun getMovie(): Movie {
-//        movieRepository = JsonMovieRepository(requireContext())
-//        return arguments?.let { movieRepository.loadMovie(it.getInt("movieID")) }!!
-//    }
 
     private fun setUpListeners() {
         binding.ivBack.setOnClickListener {

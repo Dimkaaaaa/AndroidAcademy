@@ -1,15 +1,14 @@
 package com.example.androidacademy.data.retrofit
 
-import com.example.androidacademy.data.MovieApiService
 import com.example.androidacademy.data.RemoteDataSource
 import com.example.androidacademy.data.retrofit.response.ImageResponse
-import com.example.androidacademy.model.Actor
-import com.example.androidacademy.model.Genre
-import com.example.androidacademy.model.Movie
-import com.example.androidacademy.model.MovieDetails
+import com.example.androidacademy.data.retrofit.response.asDatabase
+import com.example.androidacademy.data.retrofit.response.asDatabaseModel
+import com.example.androidacademy.data.room.entitys.ActorEntity
+import com.example.androidacademy.data.room.entitys.MovieDetailsEntity
+import com.example.androidacademy.data.room.entitys.MovieEntity
 
 class RetrofitSource(private val api: MovieApiService) : RemoteDataSource {
-
     companion object {
         const val DEFAULT_SIZE = "original"
     }
@@ -20,51 +19,46 @@ class RetrofitSource(private val api: MovieApiService) : RemoteDataSource {
     private var backdropSize: String? = null
     private var profileSize: String? = null
 
-
-    override suspend fun loadMovies(): List<Movie> {
+    override suspend fun loadMoviesFromNet(): List<MovieEntity> {
         loadConfiguration()
-        val genres = api.loadGenres().genres
+        val genresList = api.loadGenres().asDatabaseModel()
         return api.loadPopular(page = 1).results.map { movie ->
-            Movie(
+            MovieEntity(
                     id = movie.id,
-                    pgAge = if (movie.adult) 16 else 13,
                     title = movie.title,
-                    genres = genres
-                            .filter { genreResponse ->
-                                movie.genreIds.contains(genreResponse.id)
-                            }.map {
-                                Genre(
-                                        id = it.id,
-                                        name = it.name
-                                )
-                            },
-                    runningTime = 120,
-                    reviewCount = movie.voteCount,
-                    isLiked = true,
-                    rating = movie.voteAverage.toInt(),
-                    imageUrl = constructUrl(baseUrl, posterSize, movie.posterPath)
+                    posterPath = formingUrl(baseUrl, posterSize, movie.posterPath),
+                    voteAverage = movie.voteAverage.toInt(),
+                    voteCount = movie.voteCount,
+                    adult = if (movie.adult) 16 else 13,
+                    genreIds = genresList.filter { genreEntity ->
+                        movie.genreIds.contains(genreEntity.genreId)
+                    }
             )
         }
+
     }
 
-    override suspend fun loadMovie(movieId: Int): MovieDetails {
+
+    override suspend fun loadMovieFromNet(movieId: Int): MovieDetailsEntity {
         loadConfiguration()
         val details = api.loadMovieDetails(movieId)
-        return MovieDetails(
+        return MovieDetailsEntity(
                 id = details.id,
-                pgAge = if (details.adult) 16 else 13,
+                adult = if (details.adult) 16 else 13,
                 title = details.title,
-                genres = details.genres.map { Genre(id = it.id, name = it.name) },
-                reviewCount = details.voteCount,
-                isLiked = true,
-                rating = details.voteAverage.toInt(),
-                detailImageUrl = constructUrl(baseUrl, backdropSize, details.backdropPath),
-                storyLine = details.overview.orEmpty(),
+                genres = details.genres.asDatabase(),
+                revenue = details.revenue,
+                voteCount = details.popularity.toInt(),
+                backdropPath = formingUrl(baseUrl, backdropSize, details.backdropPath),
+                overview = details.overview.orEmpty(),
+                popularity = details.voteCount,
+                runtime = details.runtime,
+                voteAverage = details.voteAverage,
                 actors = api.loadMovieCredits(movieId).casts.map {
-                    Actor(
+                    ActorEntity(
                             id = it.id,
                             name = it.name,
-                            imageUrl = constructUrl(baseUrl, profileSize, it.profilePath).orEmpty()
+                            profilePath = formingUrl(baseUrl, profileSize, it.profilePath)
                     )
                 }
         )
@@ -74,19 +68,21 @@ class RetrofitSource(private val api: MovieApiService) : RemoteDataSource {
         if (imageResponse == null) {
             imageResponse = api.loadConfiguration().images
             baseUrl = imageResponse?.secureBaseUrl
+            // TODO придумать более изящный вариант
             posterSize = imageResponse?.posterSizes?.find { it == "w500" }
+            // TODO придумать более изящный вариант
             backdropSize = imageResponse?.backdropSizes?.find { it == "w780" }
+            // TODO придумать более изящный вариант
             profileSize = imageResponse?.profileSizes?.find { it == "w185" }
         }
     }
 
-    private fun constructUrl(baseUrl: String?, size: String?, path: String?): String? {
-        if (path == null || baseUrl == null) return null
-        else {
-            return baseUrl
-                    .plus(size ?: DEFAULT_SIZE)
+    private fun formingUrl(url: String?, size: String?, path: String?): String? {
+        return if (url == null || path == null) {
+            null
+        } else {
+            url.plus(size.takeUnless { it.isNullOrEmpty() } ?: DEFAULT_SIZE)
                     .plus(path)
         }
     }
-
 }
